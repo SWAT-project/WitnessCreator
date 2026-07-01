@@ -1,0 +1,79 @@
+name: Build WitnessCreator
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4
+
+      - name: Build release artifact
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ "$GITHUB_REF_TYPE" != "tag" ]]; then
+            version="ci-${GITHUB_SHA::7}"
+          fi
+          ./gradlew --no-daemon -PwitnessCreatorVersion="$version" clean build
+
+      - name: Create checksum
+        run: |
+          cd build/distributions
+          sha256sum witness-creator-*.zip > SHA256SUMS
+
+      - name: Upload CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: witness-creator-${{ github.sha }}
+          path: |
+            build/distributions/witness-creator-*.zip
+            build/distributions/SHA256SUMS
+          if-no-files-found: error
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download CI artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: witness-creator-${{ github.sha }}
+          path: dist
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          notes="$(printf 'Automated WitnessCreator release.\n\nCommit: %s\nRun: %s/%s/actions/runs/%s\n' \
+            "$GITHUB_SHA" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID")"
+
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" dist/witness-creator-*.zip dist/SHA256SUMS --clobber
+          else
+            gh release create "$tag" dist/witness-creator-*.zip dist/SHA256SUMS \
+              --verify-tag \
+              --title "WitnessCreator ${tag}" \
+              --notes "$notes"
+          fi
