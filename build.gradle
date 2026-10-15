@@ -14,12 +14,18 @@ repositories {
 
 dependencies {
     implementation 'org.antlr:ST4:4.3.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
 
 application {
