@@ -1,8 +1,18 @@
-.gradle/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
 build/
-out/
-*.class
+dist/
+*.pyz
+.pytest_cache/
+.venv/
+venv/
 *.log
 .DS_Store
-*.iml
 .idea/
+*.iml
+# leftovers of the Java build
+.gradle/
+out/
+*.class
