@@ -1,0 +1,3 @@
+recursive-include tests *
+recursive-include tools *.py
+global-exclude __pycache__ *.py[cod]
