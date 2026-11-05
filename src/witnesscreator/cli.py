@@ -52,7 +52,7 @@ def _add_common(p: argparse.ArgumentParser, producer_name: Optional[str], produc
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="witnesscreator",
-        description="Creates SV-COMP violation witnesses for Java (YAML format 2.3 and legacy GraphML).",
+        description="Creates SV-COMP violation witnesses for Java (YAML format 2.4 and legacy GraphML).",
     )
     parser.add_argument("--version", action="version", version=f"witnesscreator {__version__}")
     parser.add_argument("-v", "--verbose", action="store_true", help="debug output")

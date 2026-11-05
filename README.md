@@ -2,7 +2,7 @@
 
 WitnessCreator creates SV-COMP violation witnesses for Java programs:
 
-- `witness.yml` in the [YAML witness format 2.3](https://gitlab.com/sosy-lab/benchmarking/sv-witnesses)
+- `witness.yml` in the [YAML witness format 2.4](https://gitlab.com/sosy-lab/benchmarking/sv-witnesses)
   (required for Java in SV-COMP 2027): one `violation_sequence` with a `function_return`
   waypoint per `Verifier.nondet*()` value (`\result == <java literal>` at the closing
   parenthesis of the call) and a final `target` waypoint at the violating statement;

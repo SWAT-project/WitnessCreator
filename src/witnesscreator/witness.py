@@ -211,7 +211,7 @@ def build_witness(task: Task, values: Iterable[NondetReturn], violation: Optiona
 
 
 def render_yaml(task: Task, values: Iterable[NondetReturn], violation: Optional[Violation]) -> str:
-    """The YAML (format 2.3) witness as a string."""
+    """The YAML (format 2.4) witness as a string."""
     built = build_witness(task, values, violation)
     return _render_yaml(built.metadata, built.waypoints)
 

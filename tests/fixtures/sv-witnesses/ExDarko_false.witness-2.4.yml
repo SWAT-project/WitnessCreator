@@ -8,7 +8,7 @@
 - entry_type: "violation_sequence"
   metadata:
     creation_time: "2026-09-08T17:36:11Z"
-    format_version: "2.3"
+    format_version: "2.4"
     producer:
       name: "GDart"
       version: "VERSION_PLACEHOLDER"
@@ -29,7 +29,7 @@
         action: "follow"
         constraint:
           value: "\\result == 0"
-          format: "java_expression"
+          format: "ext_java_expression"
         location:
           file_name: "./java/jpf-regression/ExDarko_false/Main.java"
           line: 34
@@ -40,7 +40,7 @@
         action: "follow"
         constraint:
           value: "\\result == 0"
-          format: "java_expression"
+          format: "ext_java_expression"
         location:
           file_name: "./java/jpf-regression/ExDarko_false/Main.java"
           line: 35

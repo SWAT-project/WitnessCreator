@@ -41,7 +41,7 @@ def test_gdart_example_matches_official_witness(tmp_path, witnesslint):
     violation = Violation("java.lang.AssertionError", [Frame("Main", "Main.java", 48), Frame("Main", "Main.java", 35)])
     paths = write_witnesses(task, values, violation, tmp_path)
     ours = load_yaml(paths["yaml"])
-    official = yaml.safe_load((base / "ExDarko_false.witness-2.3.yml").read_text(encoding="utf-8"))[0]
+    official = yaml.safe_load((base / "ExDarko_false.witness-2.4.yml").read_text(encoding="utf-8"))[0]
     assert ours["content"] == official["content"]
     assert ours["metadata"]["task"] == official["metadata"]["task"]
     assert ours["metadata"]["producer"] == official["metadata"]["producer"]
