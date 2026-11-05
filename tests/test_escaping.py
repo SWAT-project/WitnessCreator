@@ -48,7 +48,7 @@ def test_yaml_document_structure():
     assert entry["metadata"]["task"]["input_file_hashes"] == {"a/Main.java": "0" * 64}
     assert entry["metadata"]["task"]["specification"] == "CHECK( init(Main.main()), LTL(G assert) )"
     wps = [s["segment"][0]["waypoint"] for s in entry["content"]]
-    assert wps[0]["constraint"] == {"value": '\\result.equals("x")', "format": "java_expression"}
+    assert wps[0]["constraint"] == {"value": '\\result.equals("x")', "format": "ext_java_expression"}
     assert wps[0]["location"] == {"file_name": "a/Main.java", "line": 3, "column": 7}
     assert wps[1] == {"type": "target", "action": "follow", "location": {"file_name": "a/Main.java", "line": 4}}
     assert yaml.safe_load(render_yaml(md, []))[0]["content"] == []

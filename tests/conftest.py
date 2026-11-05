@@ -52,13 +52,13 @@ def witnesslint():
 
 
 def load_yaml(path: Path):
-    """Parses the witness with PyYAML and checks the basic 2.3 structure."""
+    """Parses the witness with PyYAML and checks the basic 2.4 structure."""
     doc = yaml.safe_load(path.read_text(encoding="utf-8"))
     assert isinstance(doc, list) and len(doc) == 1
     entry = doc[0]
     assert entry["entry_type"] == "violation_sequence"
     md = entry["metadata"]
-    assert md["format_version"] == "2.3"
+    assert md["format_version"] == "2.4"
     assert md["task"]["language"] == "Java"
     assert "data_model" not in md["task"]
     assert set(md["task"]["input_file_hashes"]) == set(md["task"]["input_files"])
@@ -72,7 +72,7 @@ def load_yaml(path: Path):
         if "column" in wp["location"]:
             assert wp["location"]["column"] >= 1
         if wp["type"] == "function_return":
-            assert wp["constraint"]["format"] == "java_expression"
+            assert wp["constraint"]["format"] == "ext_java_expression"
         else:
             assert wp["type"] == "target" and "constraint" not in wp
     return entry

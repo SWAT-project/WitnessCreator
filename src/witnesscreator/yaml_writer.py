@@ -1,11 +1,11 @@
-"""Hand-written emitter for violation witnesses in the YAML format, version 2.3."""
+"""Hand-written emitter for violation witnesses in the YAML format, version 2.4."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import List, Optional, Sequence, Tuple
 
-FORMAT_VERSION = "2.3"
+FORMAT_VERSION = "2.4"
 
 _YAML_ESCAPES = {
     '"': '\\"',
@@ -52,10 +52,15 @@ class Waypoint:
     file_name: str
     line: int
     column: Optional[int] = None
+    constraint_format: Optional[str] = None
 
     @classmethod
     def function_return(cls, constraint: str, file_name: str, line: int, column: Optional[int]):
-        return cls("function_return", constraint, file_name, line, column)
+        # The constraint uses the \result extension keyword, so from format 2.4 on it must
+        # be declared as an extension expression; plain java_expression is no longer allowed
+        # for function_return waypoints (schema: ext_c/acsl/ext_java/ext_python_expression).
+        return cls("function_return", constraint, file_name, line, column,
+                   constraint_format="ext_java_expression")
 
     @classmethod
     def target(cls, file_name: str, line: int, column: Optional[int]):
@@ -117,7 +122,7 @@ def render_yaml(metadata: Metadata, waypoints: List[Waypoint]) -> str:
         if wp.constraint is not None:
             out.append("        constraint:\n")
             out.append(f"          value: {q(wp.constraint)}\n")
-            out.append('          format: "java_expression"\n')
+            out.append(f"          format: {q(wp.constraint_format or 'java_expression')}\n")
         out.append("        location:\n")
         out.append(f"          file_name: {q(wp.file_name)}\n")
         out.append(f"          line: {int(wp.line)}\n")
