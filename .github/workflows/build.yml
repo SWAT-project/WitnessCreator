@@ -30,7 +30,10 @@ jobs:
 
       - name: Install WitnessLint
         run: |
-          git clone --depth 1 https://gitlab.com/sosy-lab/benchmarking/sv-witnesses.git "$RUNNER_TEMP/sv-witnesses"
+          # WitnessLint 2.4 ("Release 2.4"), the version SV-COMP 2027 validates with. master has
+          # unreleased checks (e.g. rejecting witnesses without a target waypoint).
+          git clone https://gitlab.com/sosy-lab/benchmarking/sv-witnesses.git "$RUNNER_TEMP/sv-witnesses"
+          git -C "$RUNNER_TEMP/sv-witnesses" checkout --quiet 28d273853e11cfeb0ddc7ef26f84f2a3c6fd2d20
           python -m pip install -r "$RUNNER_TEMP/sv-witnesses/linter/requirements.txt"
           echo "WITNESSLINT=python $RUNNER_TEMP/sv-witnesses/linter/witnesslinter.py" >> "$GITHUB_ENV"
 
