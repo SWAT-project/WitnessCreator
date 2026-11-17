@@ -140,7 +140,10 @@ def floating_constraint(value: str, is_float: bool) -> str:
     box = "Float" if is_float else "Double"
     v = value.strip()
     if v == "NaN":
-        return f"{box}.isNaN({RESULT})"
+        # NaN is the only value not equal to itself. Validators that read a single
+        # value from the constraint (e.g. JLiSA-Wit) accept this form but not
+        # ``Float.isNaN(\result)``; ``\result == Float.NaN`` would be always false.
+        return f"{RESULT} != {RESULT}"
     if v == "Infinity":
         return f"{RESULT} == {box}.POSITIVE_INFINITY"
     if v == "-Infinity":

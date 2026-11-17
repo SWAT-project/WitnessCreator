@@ -92,7 +92,7 @@ def test_float_special_values(tmp_path, witnesslint):
     entry, (_, _, edges) = write(task_for(task_dir), values, violation, tmp_path)
     wps = waypoints(entry)
     assert [wp["constraint"]["value"] for wp in wps[:-1]] == [
-        "\\result == Float.NEGATIVE_INFINITY", "Float.isNaN(\\result)", "\\result == -0.0f",
+        "\\result == Float.NEGATIVE_INFINITY", "\\result != \\result", "\\result == -0.0f",
         "\\result == Float.POSITIVE_INFINITY", "\\result == 10000000000.0f", "\\result == -0.0012512209359556437f",
         "\\result == 0.10000000149011612f",
     ]
